@@ -26,8 +26,10 @@ public:
 	virtual ~TaskTray();
 
 private:
-	LPSTR m_lpTrayName;					//ﾀｽｸﾄﾚｲ名
-	NOTIFYICONDATA m_typNotifyIconData;	//ﾀｽｸﾄﾚｲ用構造体
+	LPSTR m_lpTrayName = NULL;					//ﾀｽｸﾄﾚｲ名
+	NOTIFYICONDATA m_typNotifyIconData = {0};	//ﾀｽｸﾄﾚｲ用構造体
+
+	void Initialize(void);						//初期化
 };
 
 #endif // !defined(AFX_TASKTRAY_H__CFD4426A_23EA_11D5_931A_00E0292F71F1__INCLUDED_)

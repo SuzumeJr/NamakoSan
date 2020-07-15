@@ -16,7 +16,6 @@
 
 IniFile::IniFile()
 {
-
 }
 
 IniFile::~IniFile()
@@ -46,19 +45,27 @@ LPSTR IniFile::GetPath()
 BOOL IniFile::Create( HINSTANCE hInst, LPSTR lpFileName )
 {
 	//à¯êî¡™Ø∏
-	if( hInst == NULL || lpFileName == NULL )
+	if (hInst == NULL || lpFileName == NULL)
+	{
 		return FALSE;
+	}
 	
 	//”ºﬁ≠∞ŸÇ©ÇÁÇ∆ÇËÇ†Ç¶Ç∏ ﬂΩÇéÊìæÇ∑ÇÈÅB
-	if( GetModuleFileName( hInst, m_szFilePath, MAX_PATH ) == 0 )
+	if (GetModuleFileName(hInst, m_szFilePath, MAX_PATH) == 0)
+	{
 		return	FALSE;
+	}
 
 	//Ãß≤Ÿ ﬂΩÇ©ÇÁÃß≤ŸñºÇèúãé
     LPSTR lpModuleName = strrchr( m_szFilePath, '\\' );
-    if( NULL != lpFileName )
+	if (NULL != lpFileName)
+	{
         lpModuleName[1] = '\0';
+	}
 	else
+	{
 		m_szFilePath[0] = '\0';
+	}
 
 	strcat( m_szFilePath, lpFileName );
 

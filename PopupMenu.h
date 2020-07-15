@@ -21,8 +21,8 @@ public:
 	virtual ~PopupMenu();
 
 private:
-	HWND m_hWnd;
-	HMENU m_hMenu;
+	HWND m_hWnd = NULL;
+	HMENU m_hMenu = NULL;
 };
 
 #endif // !defined(AFX_POPUPMENU_H__0CFCD091_78BD_11D4_9F20_00E0292F71F1__INCLUDED_)

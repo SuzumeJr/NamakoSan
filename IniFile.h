@@ -21,12 +21,12 @@ public:
 	virtual ~IniFile();
 
 	//INIﾌｧｲﾙ項目値
-	RECT	m_NamakoRect;	//なま子さんの位置を格納する構造体
-	UINT	m_uiWndMode;	//ｳｲﾝﾄﾞﾓｰﾄﾞ
+	RECT	m_NamakoRect = {0};		//なま子さんの位置を格納する構造体
+	UINT	m_uiWndMode = 0;		//ｳｲﾝﾄﾞﾓｰﾄﾞ
 
 private:
 	//INIﾌｧｲﾙﾊﾟｽ
-	char m_szFilePath[ MAX_PATH + 1 ];
+	char m_szFilePath[MAX_PATH + 1] = {0};
 
 };
 

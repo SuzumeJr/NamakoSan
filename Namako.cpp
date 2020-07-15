@@ -191,9 +191,12 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE, LPTSTR lpCmdLine, int showCmd)
 	//ﾒｲﾝｳｲﾝﾄﾞ作成
 	WndRect = g_clsNamakoIni.m_NamakoRect;
 	DWORD WndStyle = WS_EX_TOOLWINDOW;
-	if( g_clsNamakoIni.m_uiWndMode == 1 ){
+	
+	if( g_clsNamakoIni.m_uiWndMode == 1 )
+	{
 		WndStyle |= WS_EX_TOPMOST; 
 	}
+
 	hWnd = CreateWindowEx(
 				WndStyle,psAppName,APPLI_TITLE_NAME,
 				WS_POPUP|WS_VISIBLE|WS_CLIPSIBLINGS,
@@ -204,10 +207,12 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE, LPTSTR lpCmdLine, int showCmd)
 	ShowWindow(hWnd,showCmd);
 	UpdateWindow(hWnd);
 
-	while(GetMessage(&msg,0,0,0)){
+	while(GetMessage(&msg,0,0,0))
+	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
 	return msg.wParam;
 }
 
@@ -229,7 +234,8 @@ void CharacterMove(HWND hWnd,LONG MoveX,LONG MoveY){
 	BitBlt(hdcBackBitmap,0,0,BACK_BITMAP_WIDTH,BACK_BITMAP_HEIGHT,hdcDeskTopWnd,WndRect.left,WndRect.top,SRCCOPY);
 	ReleaseDC(hWnd,hdcDeskTopWnd);
 
-	if(-48 < MoveX && MoveX < 48 || -48 < MoveY && MoveY < 48){
+	if(-48 < MoveX && MoveX < 48 || -48 < MoveY && MoveY < 48)
+	{
 		BitBlt(hdcBackBitmap,-MoveX,-MoveY,WORK_BITMAP_WIDTH,WORK_BITMAP_HEIGHT,hdcWorkBitmap,0,0,SRCCOPY);
 	}
 
@@ -248,39 +254,48 @@ void CharacterMove(HWND hWnd,LONG MoveX,LONG MoveY){
 VOID CALLBACK TimerProc (HWND hWnd,UINT uMsg,UINT idEvent,DWORD dwTime)
 {
 	//ﾊﾟﾀｰﾝｶｳﾝﾄ
-	if(WMPAINT_Flag){
+	if(WMPAINT_Flag)
+	{
 		//背景ｶｯﾊﾟﾗｲﾀｲﾐﾝｸﾞ待ち
-		switch(WMPAINT_Flag){
+		switch(WMPAINT_Flag)
+		{
 		case 1:
 			WMPAINT_Flag = 2;
 			break;
-		case 2:{
-			HDC hdcDeskTopWnd = GetDC(hDeskTopWnd);
-			BitBlt(hdcBackBitmap,0,0,BACK_BITMAP_WIDTH,BACK_BITMAP_HEIGHT,hdcDeskTopWnd,(int)(WndRect.left),(int)(WndRect.top),SRCCOPY);
-			ReleaseDC(hWnd,hdcDeskTopWnd);
-			WMPAINT_Flag = 99;
-			SetWindowPos(hWnd,NULL,0,0,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
+		case 2:
+			{
+				HDC hdcDeskTopWnd = GetDC(hDeskTopWnd);
+				BitBlt(hdcBackBitmap,0,0,BACK_BITMAP_WIDTH,BACK_BITMAP_HEIGHT,hdcDeskTopWnd,(int)(WndRect.left),(int)(WndRect.top),SRCCOPY);
+				ReleaseDC(hWnd,hdcDeskTopWnd);
+				WMPAINT_Flag = 99;
+				SetWindowPos(hWnd,NULL,0,0,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
 			}
 			break;
 		case 99:
 			WMPAINT_Flag = 0;
 			break;
 		}
-	}else{
+	}
+	else
+	{
 		//ｷｬﾗﾊﾟﾀｰﾝｶｳﾝﾄ
-		if(AnimeCounter >= ErikaAnimeCount[AnimePaturn]){
+		if(AnimeCounter >= ErikaAnimeCount[AnimePaturn])
+		{
 			AnimeCounter = 0;
 			AnimePaturn = RandAnimeP(AnimePaturn);
-		}else{
+		}
+		else
+		{
 			++AnimeCounter;
 		}
 		//ｷｬﾗｸﾀ表示
-			CharacterMove(hWnd,ErikaAnimeX[AnimePaturn][AnimeCounter],ErikaAnimeY[AnimePaturn][AnimeCounter]);
-		}
+		CharacterMove(hWnd,ErikaAnimeX[AnimePaturn][AnimeCounter],ErikaAnimeY[AnimePaturn][AnimeCounter]);
+	}
 }
 
 //ﾜｰｸ用ﾋﾞｯﾄﾏｯﾌﾟﾜｰｸ領域作成関数(天河龍輝さん作)
-HBITMAP	CreateBitmapImage( HDC hDC, LONG lWidth, LONG lHeight ){
+HBITMAP	CreateBitmapImage( HDC hDC, LONG lWidth, LONG lHeight )
+{
 	//	フルカラーのビットマップを CreateDIBSection() 関数で作成
 	BITMAPINFOHEADER	tblBmpHedr;
 	tblBmpHedr.biSize          = sizeof( BITMAPINFOHEADER );
@@ -302,8 +317,10 @@ HBITMAP	CreateBitmapImage( HDC hDC, LONG lWidth, LONG lHeight ){
 	);
 	
 	//	作成失敗
-	if( hBitmap == NULL )
-		return( NULL );
+	if (hBitmap == NULL)
+	{
+		return(NULL);
+	}
 	
 	//	オブジェクトに関連付け
 	HBITMAP	hBmpOld = (HBITMAP)SelectObject( hDC, hBitmap );
@@ -313,11 +330,13 @@ HBITMAP	CreateBitmapImage( HDC hDC, LONG lWidth, LONG lHeight ){
 }
 
 //ﾒｲﾝﾒｯｾｰｼﾞ処理部分
-LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
-
+LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
 	//ｷｬﾝｾﾙﾎﾞﾀﾝ処理
-	switch (message){
-	case WM_CREATE:{
+	switch (message)
+	{
+	case WM_CREATE:
+		{
 			//ｼｮｰﾄｶｯﾄﾒﾆｭｰ作成
 			g_clsMainMenu.Create(hWnd);
 			g_clsMainMenu.Append(MFT_STRING,ID_VER,"ﾊﾞｰｼﾞｮﾝ情報");
@@ -370,12 +389,17 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	
 	case WM_ACTIVATE:
-		if(LOWORD(wParam) == WA_INACTIVE){
+		if(LOWORD(wParam) == WA_INACTIVE)
+		{
 			WndMovFlg = FALSE;
-			if(hWnd == GetCapture()){
-				if(hMouCapWnd == NULL){
+			if(hWnd == GetCapture())
+			{
+				if(hMouCapWnd == NULL)
+				{
 					ReleaseCapture();
-				}else{
+				}
+				else
+				{
 					SetCapture(hMouCapWnd);
 				}
 			}
@@ -383,7 +407,8 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 0;
 	
 	case WM_PAINT:
-		switch(WMPAINT_Flag){
+		switch(WMPAINT_Flag)
+		{
 		case 0:
 			SetWindowPos(hWnd,NULL,0,0,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_HIDEWINDOW);
 			WMPAINT_Flag = 1;
@@ -399,7 +424,8 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	//ﾒﾆｭｰ処理ﾒｯｾｰｼﾞ
 	case WM_COMMAND:	//ﾒﾆｭｰ処理
-		switch(LOWORD(wParam)){
+		switch(LOWORD(wParam))
+		{
 		case ID_VER:	//ﾊﾞｰｼﾞｮﾝ情報表示
 			DialogBox(MainInst,MAKEINTRESOURCE(IDD_VER),hWnd,(DLGPROC)VerDlgProc);
 			AnimePaturn = ANIME_PA_RIBON;
@@ -431,14 +457,19 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//MouseﾎﾞﾀﾝUp時処理
 	case WM_LBUTTONUP:
 		WndMovFlg = FALSE;
-		if(AnimePaturn <2){
+		if(AnimePaturn <2)
+		{
 			AnimePaturn  = ANIME_PA_PIKUN;
 			AnimeCounter = 0;
 		}
-		if(hWnd == GetCapture()){
-			if(hMouCapWnd == NULL){
+		if(hWnd == GetCapture())
+		{
+			if(hMouCapWnd == NULL)
+			{
 				ReleaseCapture();
-			}else{
+			}
+			else
+			{
 				SetCapture(hMouCapWnd);
 			}
 			SetCursor(LoadCursor(MainInst,MAKEINTRESOURCE(IDC_HAND1)));
@@ -448,8 +479,10 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//ﾏｳｽｶｰｿﾙ移動時処理
 	case WM_MOUSEMOVE:
 		//ﾏｳｽﾎﾞﾀﾝﾀDownﾁｪｯｸ
-		if(LOWORD(wParam) == MK_LBUTTON){
-			if(WndMovFlg && hWnd == GetCapture()){	
+		if(LOWORD(wParam) == MK_LBUTTON)
+		{
+			if(WndMovFlg && hWnd == GetCapture())
+			{
 				CharacterMove(
 					hWnd,
 					(LONG)LOWORD(lParam) - MouPoint.x,
@@ -468,18 +501,29 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDBLCLK:
 		WndMovFlg = FALSE;
 		GetWindowRect(hWnd,&WndRect);
-		if (LOWORD(lParam)<=14){
-			if((WndRect.left+48) >= (DeskTopRect.right-24)){
+		if (LOWORD(lParam)<=14)
+		{
+			if((WndRect.left+48) >= (DeskTopRect.right-24))
+			{
 				AnimePaturn  = ANIME_PA_IJI2;
-			}else{
+			}
+			else
+			{
 				AnimePaturn  = ANIME_PA_RHJUMP;
 			}
-		}else if(LOWORD(lParam)<=34){
+		}
+		else if(LOWORD(lParam)<=34)
+		{
 			AnimePaturn  = ANIME_PA_HJUMP;
-		}else{
-			if((WndRect.left-48) <= -24){
+		}
+		else
+		{
+			if((WndRect.left-48) <= -24)
+			{
 				AnimePaturn  = ANIME_PA_IJI2;
-			}else{
+			}
+			else
+			{
 				AnimePaturn  = ANIME_PA_LHJUMP;
 			}
 		}
@@ -506,15 +550,18 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	default:
 		//ﾀｽｸﾄﾚｲからのﾒｯｾｰｼﾞかをﾁｪｯｸ
-		if( g_clsTaskTray.MessageID() == message ){
+		if( g_clsTaskTray.MessageID() == message )
+		{
 			ScrPointChk(&DeskTopRect,&WndRect);			//表示位置ﾁｪｯｸ
-			switch(lParam){
+			switch(lParam)
+			{
 			case TM_LBUTTONUP: //ﾏｳｽ左ﾎﾞﾀﾝUp
 				SetWindowPos(hWnd,HWND_NOTOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_SHOWWINDOW);
 				return 0;
 
 			case TM_LBUTTONDBLCLK:	//ﾏｳｽ左ﾎﾞﾀﾝﾀﾞﾌﾞﾙｸﾘｯｸ
-				switch( AnimePaturn ){
+				switch( AnimePaturn )
+				{
 				case 0:
 					AnimePaturn = ANIME_PA_DANS;
 					AnimeCounter = 0;
@@ -539,41 +586,56 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 //ﾗﾝﾀﾞﾑｱﾆﾒｰｼｮﾝﾊﾟﾀｰﾝ関数
-int RandAnimeP(int BaseAnimeP){
-	
-	int RetAP;
+int RandAnimeP(int BaseAnimeP)
+{	
+	int RetAP = 0;
 	int RandP = rand() & 0xff;
 
 	//おねんねﾁｪｯｸ
-	if(BaseAnimeP == ANIME_PA_NEGAERI || BaseAnimeP == ANIME_PA_SLEEP){
-		if(RandP < 17){
+	if(BaseAnimeP == ANIME_PA_NEGAERI || BaseAnimeP == ANIME_PA_SLEEP)
+	{
+		if(RandP < 17)
+		{
 			RetAP = ANIME_PA_NEGAERI;
-		}else{
-			RetAP = ANIME_PA_SLEEP;
 		}
-		
-	}else if(ErikaSleepTimer >= SLEEP_TIME){
+		else
+		{
+			RetAP = ANIME_PA_SLEEP;
+		}	
+	}
+	else if(ErikaSleepTimer >= SLEEP_TIME)
+	{
 		RetAP = ANIME_PA_SLEEP;				
-		
-	}else{		
-		switch(BaseAnimeP){
+	}
+	else
+	{		
+		switch(BaseAnimeP)
+		{
 		case ANIME_PA_HJUMP:
 		case ANIME_PA_LHJUMP:
 		case ANIME_PA_RHJUMP:
-			if(RandP < 86){
+			if(RandP < 86)
+			{
 				RetAP = ANIME_PA_PIKUN;
-			}else if(RandP < 170){
+			}
+			else if(RandP < 170)
+			{
 				RetAP = ANIME_PA_WAIT;					
-			}else{
+			}
+			else
+			{
 				RetAP = ANIME_PA_HJUMP;					
 			}
 			ErikaSleepTimer++;
 			break;
 		
 		case ANIME_PA_IJI2:
-			if(RandP < 128){
+			if(RandP < 128)
+			{
 				RetAP = ANIME_PA_PIKUN;
-			}else{
+			}
+			else
+			{
 				RetAP = ANIME_PA_WAIT;					
 			}
 			ErikaSleepTimer++;
@@ -583,13 +645,20 @@ int RandAnimeP(int BaseAnimeP){
 		case ANIME_PA_RSOWA2:
 		case ANIME_PA_DANS:
 		case ANIME_PA_FUKKIN:
-			if(RandP < 50){
+			if(RandP < 50)
+			{
 				RetAP = ANIME_PA_PIKUN;
-			}else if(RandP < 100){
+			}
+			else if(RandP < 100)
+			{
 				RetAP = ANIME_PA_WAIT;					
-			}else if(RandP < 130){
+			}
+			else if(RandP < 130)
+			{
 				RetAP = ANIME_PA_HJUMP;					
-			}else{
+			}
+			else
+			{
 				RetAP = BaseAnimeP;
 			}
 			ErikaSleepTimer++;
@@ -597,19 +666,32 @@ int RandAnimeP(int BaseAnimeP){
 		
 		case ANIME_PA_PIKUN:
 		case ANIME_PA_WAIT:				
-			if(RandP < 80){
+			if(RandP < 80)
+			{
 				RetAP = ANIME_PA_PIKUN;
-			}else if(RandP < 160){
+			}
+			else if(RandP < 160)
+			{
 				RetAP = ANIME_PA_WAIT;					
-			}else if(RandP < 180){
+			}
+			else if(RandP < 180)
+			{
 				RetAP = ANIME_PA_HJUMP;					
-			}else if(RandP < 200){
+			}
+			else if(RandP < 200)
+			{
 				RetAP = ANIME_PA_FUKKIN;
-			}else if(RandP < 220){
+			}
+			else if(RandP < 220)
+			{
 				RetAP = ANIME_PA_LSOWA2;
-			}else if(RandP < 240){
+			}
+			else if(RandP < 240)
+			{
 				RetAP = ANIME_PA_RSOWA2;
-			}else{
+			}
+			else
+			{
 				RetAP = ANIME_PA_DANS;					
 			}
 			ErikaSleepTimer++;
@@ -626,15 +708,19 @@ int RandAnimeP(int BaseAnimeP){
 	return(RetAP);
 }
 
-BOOL ScrPointChk(RECT *MasRect,RECT *SlvRect){
-
+BOOL ScrPointChk(RECT *MasRect,RECT *SlvRect)
+{
 	//表示Y座標がｵｰﾊﾞｰしていないかﾁｪｯｸ
-	if(MasRect->right <= SlvRect->left)
+	if (MasRect->right <= SlvRect->left)
+	{
 		SlvRect->left = MasRect->right - (int)WND_HEIGHT;
+	}
 
 	//表示Y座標がｵｰﾊﾞｰしていないかﾁｪｯｸ
-	if(MasRect->bottom <= SlvRect->top)
+	if (MasRect->bottom <= SlvRect->top)
+	{
 		SlvRect->top = MasRect->bottom - (int)WND_WIDTH;
+	}
 
 	return(TRUE);
 }
